@@ -21,7 +21,7 @@ const sendMail = (req, res) => {
         from: email,
         to: process.env.ZEN_HOOK_EMAIL, // The email address where you want to receive the messages
         subject: subject,
-        text: contactUsEmailFormate(name, email, subject, message)
+        html: contactUsEmailFormate(name, email, subject, message)
     };
 
     transporter.sendMail(mailOptions, async (error, info) => {
