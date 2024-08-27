@@ -18,6 +18,6 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.plugin(uniqueValidator);
 
-const User = mongoose.model('user', UserSchema);
+const User = mongoose.model('zenhookusers', UserSchema);
 
 module.exports = User;

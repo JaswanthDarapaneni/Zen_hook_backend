@@ -26,9 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Render static files
-app.use(express.static(path.join(__dirname, 'public/Contact')));
-
-
+app.use(express.static(path.join(__dirname, 'public', 'Contact')));
 
 app.use('/api/auth', userAuthRoutes);
 app.use('/api/send', contactusRoutes);
@@ -38,7 +36,6 @@ app.use('/api/send', contactusRoutes);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'Contact', 'index.html'));
 });
-
 
 
 // Connect mongoose and start

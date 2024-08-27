@@ -2,45 +2,47 @@ const User = require('../modals/user');
 const bcrypt = require('bcryptjs');
 
 const user_signin_post = (req, res) => {
-    const { email, password } = req.body;
+    const { email, pass } = req.body;
     User.findOne({ email })
         .then((response) => {
             if (response) {
-                bcrypt.compare(password, response.password, (err, result) => {
-                    if (err) throw err;
+                bcrypt.compare(pass, response.password, (err, result) => {
+                    if (err) return res.status(500).json({ status: 'error', message: 'Server error' });
                     if (result === true) {
                         const filteredUser = {
                             _id: response._id,
                             email: response.email,
                         };
-                        res.json({status: 'success', message: 'Login done successfully!'});
+                        res.json({ status: 'success', message: 'Login done successfully!' });
                     } else {
-                        res.status(401).send('Wrong Password');
+                        res.json({ status: 'error', message: 'Wrong Password' });
                     }
                 });
             } else {
-                res.json({ message: 'No Account With This Email.'});
+                res.json({ status: 'error', message: 'No Account With This Email.' });
             }
-        });
+        })
+        .catch(err => res.status(500).json({ status: 'error', message: 'Server error' }));
 };
 
+
 const user_signup_post = (req, res) => {
-    const { email, password, fullName } = req.body;
+    const { email, pass } = req.body;
 
     User.findOne({ email })
         .then(async (response) => {
             if (response) {
-                res.status(400).send('Email already exists');
+                res.json({ status: 'error', message: 'Email already exists' });
             } else {
 
                 // Giving password salt and then hash it
                 const salt = await bcrypt.genSalt();
-                const hashedPassword = await bcrypt.hash(password, salt);
+                const hashedPassword = await bcrypt.hash(pass, salt);
                 // Create the account
                 await User.create({
                     email,
                     password: hashedPassword,
-                }).then(() => res.status(201).send({ message: 'User Created', status: 'success' }));
+                }).then(() => res.json({ message: 'User Created', status: 'success' }));
             }
         })
         .catch((error) => res.status(500).send({ message: error }));
