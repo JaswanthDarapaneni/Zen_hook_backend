@@ -51,7 +51,7 @@ const organizationSendMail = (req, res) => {
     const mailOptions = {
         from: email,
         to: process.env.ORGANIZATION_EMAIL, // The email address where you want to receive the messages
-        subject: subject,
+        subject: company,
         html: OrganizationContactUsEmailFormate(name, email, company, phone, projectIdea)
     };
 
